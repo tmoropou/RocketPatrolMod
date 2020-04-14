@@ -56,30 +56,30 @@ class Menu extends Phaser.Scene {
     update() {
 
         // Initializing main.js background music var
-        game.music = this.sound.add('rocket_music'); 
+        game.global.music = this.sound.add('rocket_music'); 
 
         if (Phaser.Input.Keyboard.JustDown(keyLEFT)) {
             // easy mode
             game.settings = {
                 spaceshipSpeed: 3,
-                gameTimer: 60000    
+                gameTimer: 10000    
             }
             this.sound.play('sfx_select');
-            game.music.setVolume(0.2);
+            game.global.music.setVolume(0.2);
             this.sound.setVolume(0.2);
-            game.music.play();
+            game.global.music.play();
             this.scene.start("playScene");    
         }
         if (Phaser.Input.Keyboard.JustDown(keyRIGHT)) {
             // hard mode
             game.settings = {
                 spaceshipSpeed: 4,
-                gameTimer: 45000    
+                gameTimer: 5000    
             }
             this.sound.play('sfx_select');
-            game.music.setVolume(0.2);
+            game.global.music.setVolume(0.2);
             this.sound.setVolume(0.2);
-            game.music.play();
+            game.global.music.play();
             this.scene.start("playScene");    
         }
     }

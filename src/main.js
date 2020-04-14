@@ -10,10 +10,15 @@ let game = new Phaser.Game(config);
 // define game setings
 game.settings = {
     spaceshipSpeed: 3,
-    gameTimer: 60000
+    gameTimer: 60000,
+    highScore: 1,
+}
+
+game.global = {
+    highScore: 0, // player high score
+    music: 'rocket_music' // background music
 }
 
 // reserve some keyboard variables
 let keyF, keyLEFT, keyRIGHT;
 
-let music; // Background music variable

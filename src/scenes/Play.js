@@ -53,9 +53,24 @@ class Play extends Phaser.Scene {
         this in the create() method, because we want the score initialization to 
         happen once, when the scene is created, but before the update loop begins.
         */
-        this.p1Score = 0; 
+        this.p1Score = 0;
+        
+
         // score display
         let scoreConfig = {
+            fontFamily: 'Courier',
+            fontSize: '28px',
+            backgroundColor: '#F3B141',
+            color: '#843605',
+            align: 'center',
+            padding: {
+                top: 5,
+                bottom: 5,
+            },
+            fixedWidth: 100
+        }
+
+        let textConfig = {
             fontFamily: 'Courier',
             fontSize: '28px',
             backgroundColor: '#F3B141',
@@ -65,9 +80,13 @@ class Play extends Phaser.Scene {
                 top: 5,
                 bottom: 5,
             },
-            fixedWidth: 100
+            //fixedWidth: 150
         }
-        this.scoreLeft = this.add.text(69, 54, this.p1Score, scoreConfig);
+
+        this.scoreLeft = this.add.text(55, 54, this.p1Score, scoreConfig);
+        this.highScoreRight = this.add.text(485, 54, game.global.highScore, scoreConfig);
+        this.highScoreText = this.add.text(303, 54, 'High', textConfig);
+        this.highScoreText = this.add.text(385, 54, 'Score', textConfig);
 
         // game over flag
         this.gameOver = false;
@@ -75,9 +94,10 @@ class Play extends Phaser.Scene {
         // 60-Second play clock
         scoreConfig.fixedWidth = 0;
         this.clock = this.time.delayedCall(game.settings.gameTimer, () => {
-            game.music.setVolume(0);
-            this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', scoreConfig).setOrigin(0.5);
-            this.add.text(game.config.width/2, game.config.height/2 + 64, '(F)ire to Restart or ← for Menu', scoreConfig).setOrigin(0.5);
+            game.global.music.setVolume(0);
+            this.add.text(game.config.width/2, game.config.height/2 - 32, 'GAME OVER', scoreConfig).setOrigin(0.5);
+            this.add.text(game.config.width/2, game.config.height/2 + 32, '(F)ire to Restart or ← for Menu', scoreConfig).setOrigin(0.5);
+            this.add.text(game.config.width/2, game.config.height/2 + 96, 'High Score: ' + game.global.highScore, scoreConfig).setOrigin(0.5);
             this.gameOver = true;
         }, null, this);
     }
@@ -86,7 +106,7 @@ class Play extends Phaser.Scene {
         // check key input for restart
         if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyF)) {
             this.sound.play('sfx_select');
-            game.music.setVolume(0.2);
+            game.global.music.setVolume(0.2);
             this.scene.restart();
         }
 
@@ -121,6 +141,7 @@ class Play extends Phaser.Scene {
             this.p1Rocket.reset();
             this.shipExplode(this.ship01);
         }
+
     }
 
     checkCollision(rocket, ship) {
@@ -148,6 +169,12 @@ class Play extends Phaser.Scene {
         // score increment and repaint
         this.p1Score += ship.points;
         this.scoreLeft.text = this.p1Score;
+
+        // High score update
+        if (this.p1Score > game.global.highScore) {
+            game.global.highScore = this.p1Score;
+            this.highScoreRight.text = this.p1Score;
+        }
 
         // play explosion sound effect
         this.sound.play('sfx_explosion');
