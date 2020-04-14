@@ -1,4 +1,2 @@
-# RocketPatrol
-A Phaser 3 remake of Rocket Patrol
-
-Github pages link: https://tmoropou.github.io/RocketPatrol/
+# RocketPatrolMod
+A Phaser 3 remake of Rocket Patrol with added modifications.
