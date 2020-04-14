@@ -14,7 +14,9 @@ class Rocket extends Phaser.GameObjects.Sprite {
 
     update() {
         // left/right movement
-        if(!this.isFiring) {
+        // NOTE: Movement of the rocket after firing
+        // has been added as a mod
+        if(!this.isFiring || this.isFiring) {
             if(keyLEFT.isDown && this.x >= 47) {
                 this.x -= 2; //rocket speed
             } else if (keyRIGHT.isDown && this.x <= 578) {
