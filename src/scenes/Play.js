@@ -100,9 +100,22 @@ class Play extends Phaser.Scene {
             this.add.text(game.config.width/2, game.config.height/2 + 96, 'High Score: ' + game.global.highScore, scoreConfig).setOrigin(0.5);
             this.gameOver = true;
         }, null, this);
+
+        // set initial speed of spaceships
+        game.global.initSpeed = game.settings.spaceshipSpeed;
     }
 
     update() {
+        // Update global timeElapsed var
+        game.global.timeElapsed = this.time.now;
+
+        // make ships go faster after 30 secs
+        if (game.global.timeElapsed < 30000){
+            //do nothing
+        } else {
+            game.settings.spaceshipSpeed = game.global.initSpeed * 1.5;
+        }
+        
         // check key input for restart
         if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyF)) {
             this.sound.play('sfx_select');

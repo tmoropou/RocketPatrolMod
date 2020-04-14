@@ -13,7 +13,13 @@ class Spaceship extends Phaser.GameObjects.Sprite {
 
     update() {
         // move spaceship left
-        this.x -= game.settings.spaceshipSpeed;
+        if (game.settings.gameTimer < 30000){
+            console.log('30 secs has passed');
+            this.x -= game.settings.spaceshipSpeed;
+        } else {
+            this.x -= game.settings.spaceshipSpeed;
+        }
+        
         // wrap around screen bounds
         if (this.x <= 0 - this.width) {
             this.reset();

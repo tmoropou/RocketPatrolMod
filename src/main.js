@@ -16,7 +16,9 @@ game.settings = {
 
 game.global = {
     highScore: 0, // player high score
-    music: 'rocket_music' // background music
+    music: 'rocket_music', // background music
+    timeElapsed: 0, //time elapsed since start of game
+    initSpeed: 3 // initial speed of spaceships
 }
 
 // reserve some keyboard variables
