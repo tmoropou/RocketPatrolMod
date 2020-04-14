@@ -8,6 +8,8 @@ class Menu extends Phaser.Scene {
         this.load.audio('sfx_select', './assets/blip_select12.wav');
         this.load.audio('sfx_explosion', './assets/explosion38.wav');
         this.load.audio('sfx_rocket', './assets/rocket_shot.wav');
+        this.load.audio('rocket_music', './assets/rocket_music.mp3');
+        
     }
 
     create() {
@@ -23,6 +25,16 @@ class Menu extends Phaser.Scene {
                 bottom: 5,
             },
             fixedWidth: 0
+        }
+
+        let audioConfig = {
+            mute: false,
+            volume: 1,
+            rate: 1,
+            detune: 0,
+            seek: 0,
+            loop: false,
+            delay: 0
         }
 
         // show menu text
@@ -42,6 +54,10 @@ class Menu extends Phaser.Scene {
     }
 
     update() {
+
+        // Initializing main.js background music var
+        game.music = this.sound.add('rocket_music'); 
+
         if (Phaser.Input.Keyboard.JustDown(keyLEFT)) {
             // easy mode
             game.settings = {
@@ -49,6 +65,9 @@ class Menu extends Phaser.Scene {
                 gameTimer: 60000    
             }
             this.sound.play('sfx_select');
+            game.music.setVolume(0.2);
+            this.sound.setVolume(0.2);
+            game.music.play();
             this.scene.start("playScene");    
         }
         if (Phaser.Input.Keyboard.JustDown(keyRIGHT)) {
@@ -58,6 +77,9 @@ class Menu extends Phaser.Scene {
                 gameTimer: 45000    
             }
             this.sound.play('sfx_select');
+            game.music.setVolume(0.2);
+            this.sound.setVolume(0.2);
+            game.music.play();
             this.scene.start("playScene");    
         }
     }
