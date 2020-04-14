@@ -8,6 +8,7 @@ class Play extends Phaser.Scene {
         // load images/tile sprite
         this.load.image('rocket', './assets/rocket.png');
         this.load.image('spaceship', './assets/spaceship.png');
+        this.load.image('spaceship_flip', './assets/spaceship_flip.png');
         this.load.image('starfield', './assets/starfield.png');
 
         //load spritesheet
@@ -31,10 +32,33 @@ class Play extends Phaser.Scene {
         this.p1Rocket = new Rocket(this, game.config.width/2, 431,
             'rocket').setScale(0.5, 0.5).setOrigin(0, 0);
 
-        // add spaceship (x3)
-        this.ship01 = new Spaceship(this, game.config.width+192, 132, 'spaceship', 0, 30).setOrigin(0, 0);
-        this.ship02 = new Spaceship(this, game.config.width+96, 196, 'spaceship', 0, 20).setOrigin(0, 0);
-        this.ship03 = new Spaceship(this, game.config.width, 260, 'spaceship', 0, 10).setOrigin(0, 0);
+        // 1st Spaceship
+        if(Phaser.Math.Between(1, 2) == 1){
+            //right
+            this.ship01 = new Spaceship(this, game.config.width+192, 132, 'spaceship', 0, 30, 0).setOrigin(0, 0);
+        } else {
+            //left
+            this.ship01 = new Spaceship(this, 192, 132, 'spaceship_flip', 0, 30, 1).setOrigin(0, 0);
+        }
+
+        // 2nd Spaceship
+        if(Phaser.Math.Between(1, 2) == 1){
+            //right
+            this.ship02 = new Spaceship(this, game.config.width+96, 196, 'spaceship', 0, 20, 0).setOrigin(0, 0);
+        } else {
+            //left
+            this.ship02 = new Spaceship(this, 96, 196, 'spaceship_flip', 0, 20, 1).setOrigin(0, 0);
+        }
+
+        // 3rd Spaceship
+        if(Phaser.Math.Between(1, 2) == 1){
+            //right
+            this.ship03 = new Spaceship(this, game.config.width, 260, 'spaceship', 0, 10, 0).setOrigin(0, 0);
+        } else {
+            //left
+            this.ship03 = new Spaceship(this, 0, 260, 'spaceship_flip', 0, 10, 1).setOrigin(0, 0);
+        }
+
 
         // define keyboard keys
         keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
@@ -101,24 +125,23 @@ class Play extends Phaser.Scene {
             this.gameOver = true;
         }, null, this);
 
+        // 30 seconds in, speed up spaceships by magnitude of 1.5
+        this.clock = this.time.delayedCall(30000, () => {
+            // console.log('SPEEDING UP');
+            game.settings.spaceshipSpeed = game.global.initSpeed * 1.5;
+        }, null, this);
+
         // set initial speed of spaceships
         game.global.initSpeed = game.settings.spaceshipSpeed;
+
     }
 
     update() {
-        // Update global timeElapsed var
-        game.global.timeElapsed = this.time.now;
-
-        // make ships go faster after 30 secs
-        if (game.global.timeElapsed < 30000){
-            //do nothing
-        } else {
-            game.settings.spaceshipSpeed = game.global.initSpeed * 1.5;
-        }
         
         // check key input for restart
         if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyF)) {
             this.sound.play('sfx_select');
+            game.settings.spaceshipSpeed = game.global.initSpeed;
             game.global.music.setVolume(0.2);
             this.scene.restart();
         }
@@ -142,6 +165,7 @@ class Play extends Phaser.Scene {
         }
 
         // check collisions
+        
         if (this.checkCollision(this.p1Rocket, this.ship03)) {
             this.p1Rocket.reset();
             this.shipExplode(this.ship03);
@@ -154,7 +178,6 @@ class Play extends Phaser.Scene {
             this.p1Rocket.reset();
             this.shipExplode(this.ship01);
         }
-
     }
 
     checkCollision(rocket, ship) {
