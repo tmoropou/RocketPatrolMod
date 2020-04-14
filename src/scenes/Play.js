@@ -212,7 +212,23 @@ class Play extends Phaser.Scene {
             this.highScoreRight.text = this.p1Score;
         }
 
-        // play explosion sound effect
-        this.sound.play('sfx_explosion');
+        // play one of 5 explosion sfx
+        switch (Phaser.Math.Between(0,4)) {
+            case 0:
+                this.sound.play('sfx_explosion');
+                break;
+            case 1:
+                this.sound.play('sfx_explosion1');
+                break;
+            case 2:
+                this.sound.play('sfx_explosion2');
+                break;
+            case 3:
+                this.sound.play('sfx_explosion3');
+                break;
+            case 4: 
+                this.sound.play('sfx_explosion4');
+                break;
+        }
     }
 }
