@@ -18,6 +18,7 @@ class Play extends Phaser.Scene {
     }
 
     create() {
+        
         // place tilesprite
         this.starfield = this.add.tileSprite(0 , 0, 640, 480, 'starfield').setOrigin(0, 0);
 
@@ -118,6 +119,7 @@ class Play extends Phaser.Scene {
             //fixedWidth: 150
         }
 
+        // Actual Text
         this.scoreLeft = this.add.text(55, 54, this.p1Score, scoreConfig);
         this.highScoreRight = this.add.text(485, 54, game.global.highScore, scoreConfig);
         this.highScoreText = this.add.text(303, 54, 'High', textConfig);
@@ -145,10 +147,24 @@ class Play extends Phaser.Scene {
         // set initial speed of spaceships
         game.global.initSpeed = game.settings.spaceshipSpeed;
 
+        // *** TIMER ***
+
+        this.startTime = new Date();
+        this.totalTime = game.settings.gameTimer / 1000;
+        this.timeElapsed = 0;
+
+        this.createTimer();
+
+        // *** TIMER ***
+
     }
 
     update() {
-        
+
+        this.gameTimer = this.time.delayedCall(100, () => {
+            this.updateTimer();
+        }, null, this);
+
         // check key input for restart
         if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyF)) {
             this.sound.play('sfx_select');
@@ -163,7 +179,7 @@ class Play extends Phaser.Scene {
         }
 
         // scroll starfield
-        this.starfield.tilePositionX -= 4;
+        this.starfield.tilePositionX -= 2.5;
 
         if (!this.gameOver) {
             // update rocket
@@ -244,6 +260,43 @@ class Play extends Phaser.Scene {
             case 4: 
                 this.sound.play('sfx_explosion4');
                 break;
+        }
+    }
+
+    // timer text config and display
+    createTimer() {
+
+        // for the text showing game time left
+        let timeTextConfig = {
+            fontFamily: 'Courier',
+            fontSize: '23px',
+            backgroundColor: '#D8D7D7',
+            color: '#000000',
+            align: 'right',
+            padding: {
+                top: 5,
+                bottom: 5,
+            },
+        }
+        
+        this.timeLabel = this.add.text(314, 444, game.settings.gameTimer/1000, timeTextConfig);
+    }
+
+    // Update the timer every second
+    updateTimer() {
+        var currentTime = new Date();
+        var timeDifference = this.startTime.getTime() - currentTime.getTime();
+
+        this.timeElapsed = Math.abs(timeDifference / 1000);
+
+        var timeRemaining = this.totalTime - this.timeElapsed;
+
+        var seconds = Math.floor(timeRemaining);
+
+        var result = (seconds < 10) ? "" + seconds : "" + seconds;
+
+        if (result >= 0){
+            this.timeLabel.text = result;
         }
     }
 }
