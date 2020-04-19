@@ -19,3 +19,5 @@ Allows the player to control the Rocket after it's fired (10)
 Created 4 new explosion SFX and randomizes which one plays on impact (15) 
 
 Displays the time remaining (in seconds) on the screen (15)
+
+Created a new spaceship type (w/ new artwork) that's smaller, moves faster, and is worth more points (25)
